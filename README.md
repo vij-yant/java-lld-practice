@@ -1,48 +1,71 @@
-# Java Low Level Design (LLD) Practice
+# Parking Lot – Low Level Design Problem
 
-This repository is used to practice and implement **Low Level Design (LLD)** concepts using **Java**.  
-The goal is to design clean, extensible, and interview-ready systems while focusing on **OOP principles**, **SOLID**, and **good code structure**.
+## 📌 Problem Statement
 
----
+Design and implement a **Parking Lot system** using **Object-Oriented principles**.
 
-## 📌 Purpose of This Repository
+The system should be capable of managing parking spaces for different types of vehicles and support parking and unparking operations efficiently.
 
-- Practice **Low Level System Design** problems
-- Improve **Java coding proficiency and syntax fluency**
-- Apply **OOPS, SOLID principles, and Design Patterns**
-- Build **interview-quality implementations**
-- Keep designs modular, readable, and extensible
+The focus of this problem is on **Low Level Design (LLD)**, clean code, and extensibility.
 
 ---
 
-## 🧱 Repository Structure
-
-- **`master` branch**
-    - Contains only:
-        - Base Maven project setup
-        - This `README.md`
-    - No system-specific implementations
-
-- **Feature branches**
-    - Each branch represents **one complete LLD system**
-    - Example:
-        - `parking-lot-lld`
-        - `book-my-show-lld`
-        - `cache-lld`
-        - `elevator-system-lld`
-
-This keeps `master` clean and makes each system independently reviewable.
+## 🚗 Vehicle Types
+The parking lot should support the following vehicle types:
+- Bike
+- Car
+- Truck
 
 ---
 
-## 🛠 Tech Stack
+## 🅿️ Parking Slot Types
+Each parking slot is designed to accommodate a specific vehicle type:
+- Bike Slot
+- Car Slot
+- Truck Slot
 
-- **Language:** Java
-- **Build Tool:** Maven
-- **IDE:** IntelliJ IDEA
-- **Testing:** JUnit (where applicable)
+A vehicle can only be parked in a compatible slot.
 
 ---
 
-## 📁 Standard Project Structure (Per Branch)
+## 🎟️ Ticket
+- When a vehicle is parked, a **parking ticket** should be generated.
+- The ticket should uniquely identify the parked vehicle and the allocated slot.
+- The ticket is required to unpark the vehicle.
 
+---
+
+## 🔁 Functional Requirements
+
+1. Park a vehicle
+2. Unpark a vehicle using a ticket
+3. Track available parking slots
+4. Allocate the nearest available slot
+5. Prevent parking when no suitable slot is available
+
+---
+
+## 🚫 Constraints
+- The system should not allow parking if no compatible slot is available.
+- A parking slot can hold only one vehicle at a time.
+- The system should be extensible for future vehicle or slot types.
+
+---
+
+## 🧠 Design Expectations
+- Use proper **OOP principles**
+- Follow **SOLID principles**
+- Avoid hard-coded logic
+
+---
+
+## 🔄 Assumptions
+- In-memory system
+- Single entry and exit
+- No pricing logic
+- No UI
+
+---
+
+## 🎯 Objective
+Design a clean and extensible Parking Lot system for **LLD interviews**.
