@@ -1,0 +1,163 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' =======================
+' Core Domain
+' =======================
+
+class ParkingLot {
+  - floors : List<ParkingFloor>
+  + getFloors() : List<ParkingFloor>
+}
+
+class ParkingFloor {
+  - floorNumber : int
+  - spots : List<ParkingSpot>
+  + getAvailableSpots() : List<ParkingSpot>
+  + getFloorNumber() : int
+  + getSpots() : List<ParkingSpot>
+}
+
+class ParkingSpot {
+  - spotNo : int
+  - type : SpotType
+  - isFree : boolean
+  + occupy()
+  + setFree()
+  + isFree() : boolean
+  + getSpotNo() : int
+}
+
+enum SpotType {
+  SMALL
+  MEDIUM
+  LARGE
+  + canPark(type: VehicleType) boolean
+}
+
+enum VehicleType {
+  BIKE
+  CAR
+  TRUCK
+}
+
+abstract class Vehicle {
+  - plate : String
+  - vehicleType : VehicleType
+  + getPlate() : String
+  + getVehicleType() : VehicleType
+}
+
+class Car
+class Bike
+class Truck
+
+Vehicle <|-- Car
+Vehicle <|-- Bike
+Vehicle <|-- Truck
+
+
+' =======================
+' Ticketing
+' =======================
+
+class Ticket {
+  - ticketId : String
+  - floorNo : int
+  - spotNo : int
+  - vehicleNo : String
+  - vehicleType : VehicleType
+  - entryTime : LocalDateTime
+}
+
+class Receipt {
+  - ticketId : String
+  - vehicleNo : String
+  - vehicleType : VehicleType
+  - floorNo : int
+  - spotNo : int
+  - entryTime : LocalDateTime
+  - exitTime : LocalDateTime
+  - totalFee : double
+}
+
+' =======================
+' Services
+' =======================
+
+class ParkingService {
+  - lot : ParkingLot
+  - ticketService : TicketService
+  - strategy : SpotAllocationStrategy
+  + parkVehicle(vehicle : Vehicle) : Ticket
+  + unParkVehicle(ticketId : String) : Receipt
+}
+
+class TicketService {
+  - activeTickets : Map<String, Ticket>
+  - feeCalculator : FeeCalculator
+  + createTicket(floorNo, spotNo, vehicle) : Ticket
+  + processTicket(ticket : Ticket) : Receipt
+  + getTicketById(id : String) : Ticket
+  + closeTicket(id : String) : boolean
+}
+
+' =======================
+' Strategies
+' =======================
+
+interface SpotAllocationStrategy {
+  + allocate(type : VehicleType, spots : List<ParkingSpot>) : Optional<ParkingSpot>
+}
+
+class FirstAvailableSpotStrategy
+
+SpotAllocationStrategy <|-- FirstAvailableSpotStrategy
+interface PricingStrategy {
+  + calculateFee(hours : double) : double
+}
+
+class BikePricingStrategy {
+  + calculateFee(hours : double) : double
+}
+
+class CarPricingStrategy {
+  + calculateFee(hours : double) : double
+}
+
+class TruckPricingStrategy {
+  + calculateFee(hours : double) : double
+}
+
+
+class FeeCalculator {
+  - strategies : Map<VehicleType, PricingStrategy>
+  + calculate(type : VehicleType, hours : double) : double
+}
+
+PricingStrategy <|-- BikePricingStrategy
+PricingStrategy <|-- CarPricingStrategy
+PricingStrategy <|-- TruckPricingStrategy
+
+' =======================
+' Relationships
+' =======================
+
+ParkingLot "1"*--"1...*" ParkingFloor
+
+ParkingFloor "1"*--"1...*" ParkingSpot
+
+ParkingSpot --> SpotType
+Vehicle --> VehicleType
+
+ParkingService --> ParkingLot
+ParkingService --> TicketService
+ParkingService --> SpotAllocationStrategy
+
+TicketService o-- Ticket
+TicketService --> Receipt
+TicketService --> FeeCalculator
+
+FeeCalculator --> PricingStrategy
+
+@enduml
