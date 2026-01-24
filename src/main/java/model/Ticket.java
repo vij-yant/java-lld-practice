@@ -7,17 +7,27 @@ public class Ticket {
     private final String ticketId;
     private final int spotNo;
     private final int floorNo;
+    private Status ticketStatus;
     private final String vehicleNo;
     private final VehicleType vehicleType;
     private final LocalDateTime entryTime;
 
-    public Ticket(int spotNo, int floorNo, String vehicleNo, VehicleType vehicleType, LocalDateTime entryTime) {
+    public Ticket(int spotNo, int floorNo,String vehicleNo, VehicleType vehicleType, LocalDateTime entryTime) {
+        this.ticketStatus = Status.ACTIVE;
         this.ticketId = UUID.randomUUID().toString();
         this.spotNo = spotNo;
         this.floorNo = floorNo;
         this.vehicleNo = vehicleNo;
         this.vehicleType = vehicleType;
         this.entryTime = entryTime;
+    }
+
+    public boolean isClosed() {
+        return ticketStatus == Status.CLOSED;
+    }
+
+    public void close() {
+        this.ticketStatus = Status.CLOSED;
     }
 
     public int getSpotNo() {

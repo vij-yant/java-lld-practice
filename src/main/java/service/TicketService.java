@@ -1,5 +1,6 @@
 package service;
 
+import exception.InvalidTicketException;
 import model.Receipt;
 import model.Ticket;
 import model.Vehicle;
@@ -40,7 +41,7 @@ public class TicketService {
     }
     public Ticket getTicketById(String ticketId) throws Exception {
         if(!activeTickets.containsKey(ticketId)) {
-            throw new Exception("Invalid ticket");
+            throw new InvalidTicketException(ticketId);
         }
         return activeTickets.get(ticketId);
     }

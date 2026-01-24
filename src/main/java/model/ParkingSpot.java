@@ -1,14 +1,22 @@
 package model;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class ParkingSpot {
     private final int spotNo;
     private final SpotType type;
     private boolean isFree;
+    private final Lock spotLock = new ReentrantLock(true);
 
     public ParkingSpot(int spotNo, SpotType type) {
         this.spotNo = spotNo;
         this.type = type;
         this.isFree = true;
+    }
+
+    public Lock getLock() {
+        return spotLock;
     }
 
     public int getSpotNo() {
@@ -28,6 +36,6 @@ public class ParkingSpot {
     }
 
     public void setFree() {
-        isFree = true;
+        isFree = false;
     }
 }

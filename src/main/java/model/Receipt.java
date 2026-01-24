@@ -37,4 +37,35 @@ public class Receipt {
                 '}';
     }
 
+    public String getTicketId() {
+        return ticketId;
+    }
+
+    public String getVehicleNo() {
+        return vehicleNo;
+    }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public int getFloorNo() {
+        return floorNo;
+    }
+
+    public int getSpotNo() {
+        return spotNo;
+    }
+
+    public LocalDateTime getEntryTime() {
+        return entryTime;
+    }
+
+    public LocalDateTime getExitTime() {
+        return exitTime;
+    }
+
+    public double getAmountPaid() {
+        return amountPaid;
+    }
 }
