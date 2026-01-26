@@ -69,3 +69,54 @@ A vehicle can only be parked in a compatible slot.
 
 ## 🎯 Objective
 Design a clean and extensible Parking Lot system for **LLD interviews**.
+
+## Solution
+
+## Domain Model
+
+- **ParkingLot** – Contains multiple floors
+- **ParkingFloor** – Contains spots, manages floor-level locks
+- **ParkingSpot** – Individual spot, has `ReentrantLock` for atomic occupy/free
+- **Vehicle** – Abstract base class for all vehicles
+- **Ticket** – Tracks parking session, entry time, vehicle details
+- **Receipt** – Tracks unpark details, fee, entry/exit time
+- **FeeCalculator / PricingStrategy** – Calculates parking fees per vehicle type
+- **ParkingService** – Main service handling park/unpark logic
+- **TicketService** – Creates, processes, and closes tickets
+
+---
+
+## Concurrency Design
+
+- **ParkingSpot** – `ReentrantLock` for atomic occupy/free
+- **ParkingFloor** – `ReentrantLock` for allocation scan (`tryLock()` for non-blocking)
+- **Ticket** – `synchronized` intrinsic lock for lifecycle
+
+**Lock order:**
+- Park: `Floor + VehicleType` → `Spot`
+- Unpark: `Ticket` → `Spot`
+
+---
+
+## Concurrency Scenarios
+
+1. **Concurrent Park Requests**
+    - Multiple threads try to park at the same floor/type
+    - Spot-level locks prevent double allocation
+
+2. **Single-threaded Unpark**
+    - With single entry/exit, only spot + ticket locks needed
+
+3. **Multiple Floors**
+    - Threads scan multiple floors using `tryLock()` (non-blocking)
+    - Improves throughput without blocking threads
+
+4. **Race Conditions**
+    - Without spot locks, two threads could pick the same free spot
+    - Spot-level lock ensures atomic occupy
+
+5. **High Traffic / Vehicle Type Flood**
+    - Many threads attempt to park the same vehicle type simultaneously
+    - Floor-level `tryLock()` + spot locks allow non-blocking allocation and fairness
+
+---

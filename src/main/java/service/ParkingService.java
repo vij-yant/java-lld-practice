@@ -21,6 +21,10 @@ public class ParkingService {
         this.strategy = strategy;
     }
 
+    public ParkingLot getLot() {
+        return lot;
+    }
+
     public Ticket parkVehicle(Vehicle vehicle) {
         for(ParkingFloor floor : lot.getFloors()) {
             ReentrantLock floorLock = floor.getFloorVehicleLock(vehicle.getVehicleType());
